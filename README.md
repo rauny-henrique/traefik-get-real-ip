@@ -49,7 +49,7 @@ Rules > Transform Rules > HTTP Request Header Modification > Add
 ### Static
 
 Plugin Info:
-- moduleName: `github.com/Paxxs/traefik-get-real-ip`
+- moduleName: `github.com/rauny-henrique/traefik-get-real-ip`
 - version: `v1.0.2`
 
 Traefik Configuration:
@@ -64,7 +64,7 @@ pilot:
 experimental:
   plugins:
     real-ip:
-      moduleName: github.com/Paxxs/traefik-get-real-ip
+      moduleName: github.com/rauny-henrique/traefik-get-real-ip
       version: [Please fill the latest version !]
 ```
 
