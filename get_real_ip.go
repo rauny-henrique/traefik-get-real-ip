@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"runtime/debug"
 )
 
 const (
@@ -52,6 +53,13 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 
 // 真正干事情了
 func (g *GetRealIP) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+	defer func() {
+		if panicInfo := recover(); panicInfo != nil {
+			log("%v, %s", panicInfo, string(debug.Stack()))
+			g.next.ServeHTTP(rw, req)
+		}
+	}()
+
 	// fmt.Println("☃️当前配置：", g.proxy, "remoteaddr", req.RemoteAddr)
 	var realIPStr string
 	for _, proxy := range g.proxy {
