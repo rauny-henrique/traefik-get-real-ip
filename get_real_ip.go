@@ -88,13 +88,13 @@ func (g *GetRealIP) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		// realIP
 		if realIPStr != "" {
 			if proxy.OverwriteXFF {
-				log("🐸 Modify XFF to:%s", realIPStr)
 				req.Header.Set(xForwardedFor, realIPStr)
+				log("🐸 Modified XFF to: %s", realIPStr)
 			}
 			if proxy.OverwriteRA {
 				_, port, _ := net.SplitHostPort(req.RemoteAddr)
 				req.Header.Set(remoteAddr, (realIPStr + ":" + port))
-				log("🐸 Modify RemoteAddr to:%s", req.RemoteAddr)
+				log("🐸 Modified RemoteAddr to: %s", req.Header.Get(remoteAddr))
 			}
 			req.Header.Set(xRealIP, realIPStr)
 			break
