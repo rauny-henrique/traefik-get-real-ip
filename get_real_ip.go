@@ -60,7 +60,11 @@ func (g *GetRealIP) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		}
 	}()
 
-	log("☃️ Current RemoteAddr: %s", req.RemoteAddr)
+	// log("☃️ Current headers: %s", req.RemoteAddr)
+
+	for k, v := range req.Header {
+		log("☃️ Header: key: %s, value: %s", k, v)
+    }
 
 	var realIPStr string
 	for _, proxy := range g.proxy {
