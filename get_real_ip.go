@@ -21,7 +21,6 @@ type Proxy struct {
 	ProxyHeadervalue string `yaml:"proxyHeadervalue"`
 	RealIP           string `yaml:"realIP"`
 	OverwriteXFF     bool   `yaml:"overwriteXFF"` // override X-Forwarded-For
-	OverwriteRA      bool   `yaml:"overwriteRA"` //  override RemoteAddr
 }
 
 // Config the plugin configuration.
@@ -61,11 +60,6 @@ func (g *GetRealIP) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	}()
 
 	// log("☃️ Current headers: %s", req.RemoteAddr)
-
-	for k, v := range req.Header {
-		log("☃️ Header: key: %s, value: %s", k, v)
-    }
-
 	var realIPStr string
 	for _, proxy := range g.proxy {
 		if proxy.ProxyHeadername == "*" || req.Header.Get(proxy.ProxyHeadername) == proxy.ProxyHeadervalue {
@@ -93,12 +87,7 @@ func (g *GetRealIP) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		if realIPStr != "" {
 			if proxy.OverwriteXFF {
 				req.Header.Set(xForwardedFor, realIPStr)
-				log("🐸 Modified XFF to: %s", realIPStr)
-			}
-			if proxy.OverwriteRA {
-				_, port, _ := net.SplitHostPort(req.RemoteAddr)
-				req.Header.Set(remoteAddr, (realIPStr + ":" + port))
-				log("🐸 Modified RemoteAddr to: %s", req.Header.Get(remoteAddr))
+				// log("🐸 Modified XFF to: %s", realIPStr)
 			}
 			req.Header.Set(xRealIP, realIPStr)
 			break
