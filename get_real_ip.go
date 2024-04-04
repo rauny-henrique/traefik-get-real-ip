@@ -73,7 +73,7 @@ func (g *GetRealIP) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 			}
 			forwardedIPs := strings.Split(nIP, ",")
 
-			// log("👀 IPs:'%v' %d", forwardedIPs, len(forwardedIPs))
+			log("👀 IPs:'%v' %d", forwardedIPs, len(forwardedIPs))
 			for i := 0; i <= len(forwardedIPs)-1; i++ {
 				trimmedIP := strings.TrimSpace(forwardedIPs[i])
 				finalIP := g.getIP(trimmedIP)
@@ -87,11 +87,11 @@ func (g *GetRealIP) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		// realIP
 		if realIPStr != "" {
 			if proxy.OverwriteXFF {
-				// log("🐸 Modify XFF to:%s", realIPStr)
+				log("🐸 Modify XFF to:%s", realIPStr)
 				req.Header.Set(xForwardedFor, realIPStr)
 			}
 			if proxy.OverwriteRA {
-				// log("🐸 Modify RemoteAddr to:%s", realIPStr)
+				log("🐸 Modify RemoteAddr to:%s", realIPStr)
 				req.Header.Set(remoteAddr, realIPStr)
 			}
 			req.Header.Set(xRealIP, realIPStr)
