@@ -60,7 +60,8 @@ func (g *GetRealIP) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		}
 	}()
 
-	fmt.Println("☃️：", g.proxy, "remoteaddr", req.RemoteAddr)
+	log("☃️ Current RemoteAddr: %s", req.RemoteAddr)
+
 	var realIPStr string
 	for _, proxy := range g.proxy {
 		if proxy.ProxyHeadername == "*" || req.Header.Get(proxy.ProxyHeadername) == proxy.ProxyHeadervalue {
@@ -91,7 +92,8 @@ func (g *GetRealIP) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 				req.Header.Set(xForwardedFor, realIPStr)
 			}
 			if proxy.OverwriteRA {
-				req.Header.Set(remoteAddr, realIPStr)
+				_, port, _ := net.SplitHostPort(req.RemoteAddr)
+				req.Header.Set(remoteAddr, (realIPStr + ":" + port))
 				log("🐸 Modify RemoteAddr to:%s", req.RemoteAddr)
 			}
 			req.Header.Set(xRealIP, realIPStr)
