@@ -72,7 +72,7 @@ func (g *GetRealIP) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 			}
 			forwardedIPs := strings.Split(nIP, ",")
 
-			log("👀 IPs:'%v' %d", forwardedIPs, len(forwardedIPs))
+			// log("👀 IPs:'%v' %d", forwardedIPs, len(forwardedIPs))
 			for i := 0; i <= len(forwardedIPs)-1; i++ {
 				trimmedIP := strings.TrimSpace(forwardedIPs[i])
 				finalIP := g.getIP(trimmedIP)
