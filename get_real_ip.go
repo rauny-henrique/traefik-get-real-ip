@@ -54,7 +54,7 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 func (g *GetRealIP) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	defer func() {
 		if panicInfo := recover(); panicInfo != nil {
-			log("%v, %s", panicInfo, string(debug.Stack()))
+			// log("%v, %s", panicInfo, string(debug.Stack()))
 			g.next.ServeHTTP(rw, req)
 		}
 	}()
